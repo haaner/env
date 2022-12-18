@@ -17,8 +17,17 @@ class Env {
 
 	private static bool $isInitialized = false;
 
-	public static function getBaseUrl(): string {
-		return self::$baseUrl;
+	public static function getBaseUrl($add_protocol = false): string {
+		$base_url = self::$baseUrl;
+
+		if ($add_protocol) {
+			if (!str_starts_with($base_url, 'http')) {
+				$protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+				$base_url = $protocol . ':' . $base_url;
+			}
+		}
+
+		return $base_url;
 	}
 
 	public static function getCachePath(): string {
