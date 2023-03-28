@@ -3,6 +3,9 @@
 namespace BirdWorX;
 
 use BadMethodCallException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use UnexpectedValueException;
 
 /**
  * Class Globals
@@ -147,5 +150,28 @@ abstract class Utils {
 	 */
 	public static function underscoreToCamelCase(string $underscore_string): string {
 		return self::separatorToCamelCase($underscore_string);
+	}
+
+	/**
+	 * Liest rekursiv alle Dateien unterhalb des angegebenen Pfades aus und gibt diese mit vollständiger Pfadangabe und alphabetisch sortiert zurück.
+	 */
+	public static function getDirContents(string $path): array {
+		try {
+			$iterator = new RecursiveDirectoryIterator($path);
+		} catch (UnexpectedValueException) {
+			return array();
+		}
+
+		$rii = new RecursiveIteratorIterator($iterator);
+
+		$files = array();
+		foreach ($rii as $file) {
+			if (!$file->isDir()) {
+				$files[] = $file->getPathname();
+			}
+		}
+
+		sort($files);
+		return $files;
 	}
 }
