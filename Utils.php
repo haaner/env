@@ -44,11 +44,18 @@ abstract class Utils {
 	 *
 	 * @param mixed $mixed_var
 	 * @param array $ignore_keys Zu ignorierende Keys (werden allerdings nur auf der ersten Rekursionsstufe berücksichtigt)
-	 * @param bool $use_to_array Wenn TRUE wird die toArray()-Methode des Objekts aufgerufen - insofern diese existiert. Ein Wert != TRUE, wird nur auf der ersten Rekursionsstufe berücksichtigt.
+	 * @param bool $use_to_array Wenn TRUE wird die toArray()-Methode des Objekts aufgerufen,
+	 * @param int $recursion_level
 	 *
 	 * @return array
 	 */
-	public static function object2Array(mixed $mixed_var, array $ignore_keys = array(), bool $use_to_array = true): mixed {
+	public static function object2Array(mixed $mixed_var, array $ignore_keys = array(), bool $use_to_array = true, int $recursion_level = 0): mixed {
+
+		if ($recursion_level > 3) {
+			return '[...]';
+		}
+
+		$recursion_level++;
 
 		if (is_object($mixed_var)) {
 			if ($use_to_array && method_exists($mixed_var, 'toArray')) {
@@ -70,12 +77,12 @@ abstract class Utils {
 
 				if (is_callable(array($mixed_var, $getter))) { // Nach Möglichkeit die Standard getter-Methode des Objekts verwenden
 					try {
-						$result[$newkey] = Utils::object2Array($mixed_var->$getter());
+						$result[$newkey] = Utils::object2Array($mixed_var->$getter(), array(), true, $recursion_level);
 					} catch (BadMethodCallException) { // Wenn die Methode nicht ohne Angabe von Parametern aufgerufen werden kann
-						$result[$newkey] = Utils::object2Array($val);
+						$result[$newkey] = Utils::object2Array($val, array(), true, $recursion_level);
 					}
 				} else {
-					$result[$newkey] = Utils::object2Array($val);
+					$result[$newkey] = Utils::object2Array($val, array(), true, $recursion_level);
 				}
 			}
 
@@ -83,7 +90,7 @@ abstract class Utils {
 
 			$result = array();
 			foreach ($mixed_var as $key => $val) {
-				$result[$key] = Utils::object2Array($val, $ignore_keys);
+				$result[$key] = Utils::object2Array($val, $ignore_keys, true, $recursion_level);
 			}
 
 		} else {
