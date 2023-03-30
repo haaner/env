@@ -1,0 +1,8 @@
+{
+    "name": "birdworx/env",
+    "autoload": {
+        "psr-4": {
+            "BirdWorX\\": "."
+        }
+    }
+}
