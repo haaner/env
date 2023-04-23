@@ -105,6 +105,10 @@ class Env {
 		defined('CACHE_PATH') || define('CACHE_PATH', self::$varPath . 'cache/');
 		self::$cachePath = CACHE_PATH;
 
+		if (!file_exists(self::$cachePath)) {
+			mkdir(self::$cachePath, 0775);
+		}
+
 		self::$isCmdLineCall = !array_key_exists('REQUEST_METHOD', $_SERVER);
 /*
 		setlocale(LC_ALL, 'de_DE.utf8', 'de_DE@euro', 'de_DE', 'de', 'ge', 'German');
