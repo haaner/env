@@ -4,7 +4,7 @@ namespace BirdWorX;
 
 defined('PROJECT_PATH') || die('Please define PROJECT_PATH before using ' . __FILE__);
 
-class Env {
+abstract class Env {
 	public const PROJECT_PATH = PROJECT_PATH;
 
 	private static string $baseUrl;
