@@ -106,7 +106,7 @@ abstract class Env {
 		self::$cachePath = CACHE_PATH;
 
 		if (!file_exists(self::$cachePath)) {
-			mkdir(self::$cachePath, 0775);
+			mkdir(self::$cachePath, 0775, true);
 		}
 
 		self::$isCmdLineCall = !array_key_exists('REQUEST_METHOD', $_SERVER);
