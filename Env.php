@@ -78,6 +78,10 @@ abstract class Env {
 			}
 		}
 
+		foreach ($_ENV as $key => $val) {
+			$env[$key] = $val;
+		}
+
 		foreach ($env as $var => $val) {
 			define($var, $val);
 		}
