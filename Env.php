@@ -82,6 +82,10 @@ abstract class Env {
 			$env[$key] = $val;
 		}
 
+		if ($env['SYSTEM_KEY'] === 'dev' && isset($_SERVER['HTTP_DB_DSN'])) { // TODO: not so nice
+			$env['DB_DSN'] = urldecode($_SERVER['HTTP_DB_DSN']);
+		}
+
 		foreach ($env as $var => $val) {
 			define($var, $val);
 		}
