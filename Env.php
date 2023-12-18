@@ -51,6 +51,11 @@ abstract class Env {
 		return SYSTEM_KEY === 'dev';
 	}
 
+	public static function isTestSystem(): bool {
+		/** @noinspection PhpUndefinedConstantInspection */
+		return SYSTEM_KEY === 'test';
+	}
+
 	public static function isProdSystem(): bool {
 		/** @noinspection PhpUndefinedConstantInspection */
 		return SYSTEM_KEY === 'prod';
