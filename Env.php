@@ -67,7 +67,7 @@ abstract class Env {
 	private static function setDefinesByEnvFiles(): void {
 		$env = array();
 
-		foreach (array(PROJECT_PATH . '.env.dist', PROJECT_PATH . '.env') as $env_file) {
+		foreach (array(PROJECT_PATH . '.env.dist', PROJECT_PATH . '.env', PROJECT_PATH . '.env.testing') as $env_file) {
 			if (file_exists($env_file)) {
 				$env_lines = file($env_file);
 
@@ -85,10 +85,6 @@ abstract class Env {
 
 		foreach ($_ENV as $key => $val) {
 			$env[$key] = $val;
-		}
-
-		if ($env['SYSTEM_KEY'] === 'dev' && isset($_SERVER['HTTP_DB_DSN'])) { // TODO: not so nice
-			$env['DB_DSN'] = urldecode($_SERVER['HTTP_DB_DSN']);
 		}
 
 		foreach ($env as $var => $val) {
@@ -115,12 +111,16 @@ abstract class Env {
 		defined('VAR_PATH') || define('VAR_PATH', self::PROJECT_PATH . 'var/');
 		self::$varPath = VAR_PATH;
 
+		@chmod(self::$varPath, 0775);
+
 		defined('CACHE_PATH') || define('CACHE_PATH', self::$varPath . 'cache/');
 		self::$cachePath = CACHE_PATH;
 
 		if (!file_exists(self::$cachePath)) {
 			mkdir(self::$cachePath, 0775, true);
 		}
+
+		@chmod(self::$cachePath, 0775);
 
 		self::$isCmdLineCall = !array_key_exists('REQUEST_METHOD', $_SERVER);
 /*
