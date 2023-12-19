@@ -92,6 +92,15 @@ abstract class Env {
 		}
 	}
 
+	public static function createCachePath() {
+
+		if (!file_exists(self::$cachePath)) {
+			mkdir(self::$cachePath, 0775, true);
+		}
+
+		@chmod(self::$cachePath, 0775);
+	}
+
 	public static function init() {
 
 		if (self::$isInitialized) {
@@ -116,11 +125,7 @@ abstract class Env {
 		defined('CACHE_PATH') || define('CACHE_PATH', self::$varPath . 'cache/');
 		self::$cachePath = CACHE_PATH;
 
-		if (!file_exists(self::$cachePath)) {
-			mkdir(self::$cachePath, 0775, true);
-		}
-
-		@chmod(self::$cachePath, 0775);
+		self::createCachePath();
 
 		self::$isCmdLineCall = !array_key_exists('REQUEST_METHOD', $_SERVER);
 /*
