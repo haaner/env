@@ -2,6 +2,8 @@
 
 namespace BirdWorX;
 
+use OptX\Basic\Utils;
+
 defined('PROJECT_PATH') || die('Please define PROJECT_PATH before using ' . __FILE__);
 
 abstract class Env {
@@ -92,7 +94,11 @@ abstract class Env {
 		}
 	}
 
-	public static function createCachePath() {
+	public static function createCachePath($fresh = false) {
+
+		if ($fresh) {
+			Utils::runlink(self::$cachePath);
+		}
 
 		if (!file_exists(self::$cachePath)) {
 			mkdir(self::$cachePath, 0775, true);
