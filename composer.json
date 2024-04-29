@@ -1,5 +1,12 @@
 {
     "name": "birdworx/env",
+    "description": "A simple PHP class to read .env[.dist] files and set PHP-defines accordingly.",
+    "license": [
+        "GPL-3.0-or-later"
+    ],
+    "require": {
+	"php": ">=8.2"
+    },
     "autoload": {
         "psr-4": {
             "BirdWorX\\": "."
